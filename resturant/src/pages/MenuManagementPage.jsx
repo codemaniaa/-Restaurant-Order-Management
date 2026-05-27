@@ -63,7 +63,8 @@ const emptyForm = {
 
 export default function MenuManagementPage() {
   const [menuItems, setMenuItems] = useState([]);
-  const [categories, setCategories] = useState([]); 
+  const [categories, setCategories] = useState([]);
+  const [, setLoading] = useState(true);
 
   useEffect(() => {
     fetchData();
