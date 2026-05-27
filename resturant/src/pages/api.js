@@ -294,6 +294,5 @@ export const ordersApi = {
       payment_status: "paid",
     },
   }),
-  history: () =>
-  api("/orders/history/"),
+   
 };

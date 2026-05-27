@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { ordersApi, unwrap } from "./api";
-import { StatusBadge, PaymentBadge, Button, Modal, formatDate, formatCurrency } from "../components/UI";
+import { StatusBadge, PaymentBadge, Modal, formatDate, formatCurrency } from "../components/UI";
 import { OrderDetailModal } from "../components/OrderCard";
 
 const STATUS_TRANSITIONS = {

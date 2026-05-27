@@ -5,15 +5,30 @@ Production-ready configuration with JWT auth, CORS, and DRF.
 import os
 from pathlib import Path
 from datetime import timedelta
+from decouple import config, Csv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-change-this-in-production-use-env-variable'
 
-DEBUG = True  # Set to False in production
+# SECURITY
+SECRET_KEY = config("SECRET_KEY")
 
-ALLOWED_HOSTS = ['*']  # Restrict in production
+DEBUG = config("DEBUG", default=False, cast=bool)
 
+ALLOWED_HOSTS = config(
+    "ALLOWED_HOSTS",
+    cast=Csv()
+)
+
+# Security hardening
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = "DENY"
+
+CSRF_COOKIE_SECURE = not DEBUG
+SESSION_COOKIE_SECURE = not DEBUG
+
+SECURE_SSL_REDIRECT = not DEBUG
 # ─── Application Definition ───────────────────────────────────────────────────
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")

@@ -61,9 +61,10 @@ export default function DashboardPage({ onNavigate }) {
   payment_pending: 0,
 });
 const [revenueData, setRevenueData] = useState([]);
+
 useEffect(() => {
   fetchDashboard();
-}, []);
+}, [fetchDashboard]);
 
 async function fetchDashboard() {
   try {
@@ -127,7 +128,7 @@ function buildRevenueChart(allOrders) {
     Fri: 0,
     Sat: 0,
   };
-  
+
   allOrders.forEach(order => {
     if (order.payment_status === "paid") {
       const day = days[new Date(order.created_at).getDay()];

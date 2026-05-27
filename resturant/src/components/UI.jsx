@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import {  useEffect} from "react";
 
 // ─── Status Badge ──────────────────────────────────────────────────────────────
 export function StatusBadge({ status }) {

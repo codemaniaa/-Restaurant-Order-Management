@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { menuApi, unwrap } from "./api";
-import { Modal, ConfirmModal, Button, Input, Select, Toggle, EmptyState, StatusBadge, formatCurrency } from "../components/UI";
+import { Modal, ConfirmModal, Button, Input, Select, Toggle, EmptyState, formatCurrency } from "../components/UI";
 
 function MenuItemCard({ item, onEdit, onDelete, onToggle }) {
   return (
@@ -63,8 +63,7 @@ const emptyForm = {
 
 export default function MenuManagementPage() {
   const [menuItems, setMenuItems] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [categories, setCategories] = useState([]); 
 
   useEffect(() => {
     fetchData();
