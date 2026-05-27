@@ -63,59 +63,60 @@ export default function DashboardPage({ onNavigate }) {
 const [revenueData, setRevenueData] = useState([]);
 
 useEffect(() => {
-  fetchDashboard();
-}, [fetchDashboard]);
+  async function fetchDashboard() {
+    try {
+      setLoading(true);
 
-async function fetchDashboard() {
-  try {
-    setLoading(true);
+      const res = await ordersApi.all();
+      const allOrders = unwrap(res);
 
-    const res = await ordersApi.all();
-    const allOrders = unwrap(res);
+      setOrders(allOrders);
 
-    setOrders(allOrders);
+      // Stats calculate
+      const totalOrders = allOrders.length;
 
-    // Stats calculate
-    const totalOrders = allOrders.length;
+      const pendingOrders = allOrders.filter(
+        o => o.status === "pending"
+      ).length;
 
-    const pendingOrders = allOrders.filter(
-      o => o.status === "pending"
-    ).length;
+      const preparingOrders = allOrders.filter(
+        o => o.status === "preparing"
+      ).length;
 
-    const preparingOrders = allOrders.filter(
-      o => o.status === "preparing"
-    ).length;
+      const deliveredOrders = allOrders.filter(
+        o => o.status === "delivered"
+      ).length;
 
-    const deliveredOrders = allOrders.filter(
-      o => o.status === "delivered"
-    ).length;
+      const totalRevenue = allOrders
+        .filter(o => o.payment_status === "paid")
+        .reduce((sum, o) => sum + Number(o.total_price), 0);
 
-    const totalRevenue = allOrders
-      .filter(o => o.payment_status === "paid")
-      .reduce((sum, o) => sum + Number(o.total_price), 0);
+      const paymentPending = allOrders
+        .filter(o => o.payment_status !== "paid")
+        .reduce((sum, o) => sum + Number(o.total_price), 0);
 
-    const paymentPending = allOrders
-      .filter(o => o.payment_status !== "paid")
-      .reduce((sum, o) => sum + Number(o.total_price), 0);
+      setStats({
+        total_orders: totalOrders,
+        pending_orders: pendingOrders,
+        preparing_orders: preparingOrders,
+        delivered_orders: deliveredOrders,
+        total_revenue: totalRevenue,
+        payment_pending: paymentPending,
+      });
 
-    setStats({
-      total_orders: totalOrders,
-      pending_orders: pendingOrders,
-      preparing_orders: preparingOrders,
-      delivered_orders: deliveredOrders,
-      total_revenue: totalRevenue,
-      payment_pending: paymentPending,
-    });
+      // Recent 7 days revenue
+      buildRevenueChart(allOrders);
 
-    // Recent 7 days revenue
-    buildRevenueChart(allOrders);
-
-  } catch (error) {
-    console.error(error);
-  } finally {
-    setLoading(false);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   }
-}
+
+  fetchDashboard();   
+}, []);                
+
 
 function buildRevenueChart(allOrders) {
   const days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
