@@ -2,7 +2,7 @@
 
 export const BASE_URL =
   (typeof window !== "undefined" && window.__API_BASE__) ||
-  "https://shahwandadeera-restaurant-production.up.railway.app/";
+  "https://shahwandadeera-restaurant-production.up.railway.app";
 
 const ACCESS_KEY = "kt_access";
 const REFRESH_KEY = "kt_refresh";
