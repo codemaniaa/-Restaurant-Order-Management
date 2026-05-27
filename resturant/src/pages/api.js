@@ -50,7 +50,7 @@ async function refreshAccess() {
   const refresh = tokenStore.refresh;
   if (!refresh) return null;
 
-  const res = await fetch(`${BASE_URL}/token/refresh/`, {
+  const res = await fetch(`${BASE_URL}/api/auth/token/refresh/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -152,7 +152,7 @@ export async function api(path, init = {}) {
 // ─── Auth ─────────────────────────────
 
 export async function login(username, password) {
-  const data = await api("/auth/login/", {
+ const data = await api("/api/auth/login/", {
     method: "POST",
     json: { username, password },
     auth: false,
@@ -172,7 +172,7 @@ export async function login(username, password) {
 }
 
 export async function signup(payload) {
-  await api("/auth/signup/", {
+  await api("/api/auth/signup/", {
     method: "POST",
     json: payload,
     auth: false,
@@ -186,7 +186,7 @@ export async function logout() {
 
   try {
     if (refresh) {
-      await api("/accounts/logout/", {
+      await api("/api/auth/logout/", {
         method: "POST",
         json: { refresh },
       });
@@ -200,7 +200,7 @@ export async function logout() {
 
 export const menuApi = {
   categories: () =>
-    api("/menu/categories/"),
+    api("/api/menu/categories/"),
 
   items: (params) => {
     const q = new URLSearchParams();
@@ -219,32 +219,32 @@ export const menuApi = {
 
     const qs = q.toString();
 
-    return api(`/menu/items/${qs ? `?${qs}` : ""}`);
+    return api(`/api/menu/items/${qs ? `?${qs}` : ""}`);
   },
 
 createItem: (data) =>
-  api("/menu/items/", {
+  api("/api/menu/items/", {
     method: "POST",
     body: data,
   }),
 
 updateItem: (id, data) =>
-  api(`/menu/items/${id}/`, {
+  api(`/api/menu/items/${id}/`, {
     method: "PATCH",
     body: data,
   }),
   deleteItem: (id) =>
-    api(`/menu/items/${id}/`, {
+    api(`/api/menu/items/${id}/`, {
       method: "DELETE",
     }),
 
   toggleAvailability: (id) =>
-    api(`/menu/items/${id}/toggle-availability/`, {
+    api(`/api/menu/items/${id}/toggle-availability/`, {
       method: "POST",
     }),
 
   createCategory: (name) =>
-    api("/menu/categories/", {
+    api("/api/menu/categories/", {
       method: "POST",
       json: { name },
     }),
@@ -258,37 +258,37 @@ export const unwrap = (r) =>
 // ─── Orders API ───────────────────────
 
 export const ordersApi = {
-  all: () => api("/orders/"),
+  all: () => api("/api/orders/"),
 
-  pending: () => api("/orders/pending/"),
+  pending: () => api("/api/orders/pending/"),
 
   kitchenQueue: () =>
-    api("/orders/kitchen-queue/"),
+    api("/api/orders/kitchen-queue/"),
 
   delivered: () =>
-    api("/orders/delivered/"),
+    api("/api/orders/delivered/"),
 
   history: () =>
-    api("/orders/history/"),
+    api("/api/orders/history/"),
 
   setStatus: (id, status) => {
   const formData = new FormData();
   formData.append("status", status);
 
-  return api(`/orders/${id}/update-status/`, {
+  return api(`/api/orders/${id}/update-status/`, {
     method: "PATCH",
     body: formData,
   });
 },
     create: (data) =>
-    api("/orders/", {
+    api("/api/orders/", {
       method: "POST",
       body: data,
     }),
  
 
  verifyPayment: (id) =>
-  api(`/orders/${id}/update-payment/`, {
+  api(`/api/orders/${id}/update-payment/`, {
     method: "PATCH",
     json: {
       payment_status: "paid",
