@@ -125,40 +125,35 @@ export default function CreateOrderPage({ onNavigate }) {
   });
   const remove    = (id) => setCart(prev => { const n = { ...prev }; delete n[id]; return n; });
 
-  const handleSubmit = async () => {
+ const handleSubmit = async () => {
   if (!form.customer_name || !form.customer_phone || cartItems.length === 0) return;
   try {
     setSubmitting(true);
-    const payload = {
-      customer_name: form.customer_name,
-      customer_phone: form.customer_phone,
-      notes: form.notes,
-      payment_status: form.payment_status,
 
-      items: cartItems.map(c => ({
-        menu_item: c.item.id,
-        quantity: c.quantity,
-      })),
-    };
-    await ordersApi.create(payload);
+    const formData = new FormData();
+    formData.append("customer_name", form.customer_name);
+    formData.append("customer_phone", form.customer_phone);
+    formData.append("notes", form.notes);
+    formData.append("payment_status", form.payment_status);
+
+    cartItems.forEach((c, idx) => {
+      formData.append(`items[${idx}][menu_item]`, c.item.id);
+      formData.append(`items[${idx}][quantity]`, c.quantity);
+    });
+
+    await ordersApi.create(formData);   // ✅ send FormData
     setSuccess(true);
     setCart({});
-    setForm({
-      customer_name: "",
-      customer_phone: "",
-      notes: "",
-      payment_status: "unpaid",
-    });
-    setTimeout(() => {
-      setSuccess(false);
-    }, 2000);
+    setForm({ customer_name: "", customer_phone: "", notes: "", payment_status: "unpaid" });
+    setTimeout(() => setSuccess(false), 2000);
   } catch (error) {
     console.error(error);
     alert(error.message);
   } finally {
     setSubmitting(false);
   }
-  };
+};
+
 if (loading) {
   return (
     <div className="flex items-center justify-center h-screen">
