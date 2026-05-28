@@ -281,10 +281,11 @@ export const ordersApi = {
   });
 },
     create: (data) =>
-    api("/api/orders/", {
-      method: "POST",
-      body: data,
-    }),
+  api("/api/orders/", {
+    method: "POST",
+    json: data,   
+  }),
+
  
 
  verifyPayment: (id) =>
