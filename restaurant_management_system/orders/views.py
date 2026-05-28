@@ -13,7 +13,8 @@ from .filters import OrderFilter
 from .models import Order, OrderStatusHistory
 from .serializers import ( OrderCreateSerializer, OrderDetailSerializer, OrderListSerializer, OrderStatusUpdateSerializer, OrderUpdateSerializer, PaymentStatusUpdateSerializer,
 )
-from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.parsers import MultiPartParser, FormParser,JSONParser
+
 
 class OrderViewSet(viewsets.ModelViewSet):
     """
@@ -22,7 +23,7 @@ class OrderViewSet(viewsets.ModelViewSet):
     Admin  : create, read, update, delete, filter, search
     Chef   : read + status update only (enforced in get_permissions)
     """
-    parser_classes = [MultiPartParser, FormParser]
+    parser_classes = [MultiPartParser, FormParser, JSONParser]
     
     queryset = Order.objects.select_related(
         'created_by', 'delivered_by'
