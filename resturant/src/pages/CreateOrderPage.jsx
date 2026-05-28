@@ -162,7 +162,7 @@ if (loading) {
   );
 }
   return (
-    <div className="flex gap-5 h-[calc(100vh-8rem)]">
+    <div className="md:flex gap-5 h-[calc(100vh-8rem)]">
       {/* Left — Menu browser */}
       <div className="flex-1 min-w-0 flex flex-col gap-4 overflow-hidden">
         {/* Search + filter */}
